@@ -9,29 +9,30 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
 export default function Eventpage({ evt }) {
   const router = useRouter()
-  const deleteEvent = async(e) => {
-    if(confirm('Are you Sure?')){
-      const res = await fetch(`${API_URL}/api/events/${evt.id}`, {
-        method: 'DELETE',
-      })
-      
-      const data = await res.json()
-      console.log(data)
 
-      if(!res.ok){
-        toast.error(data.message)
-      }else{
-        router.push('/events')
-      }
-    }
-  };
+  // const deleteEvent = async(e) => {
+  //   if(confirm('Are you Sure?')){
+  //     const res = await fetch(`${API_URL}/api/events/${evt.id}`, {
+  //       method: 'DELETE',
+  //     })
+      
+  //     const data = await res.json()
+  //     console.log(data)
+
+  //     if(!res.ok){
+  //       toast.error(data.message)
+  //     }else{
+  //       router.push('/events')
+  //     }
+  //   }
+  // };
   // console.log(evt.attributes.image.data.attributes.formats.medium.url)
   console.log(evt.attributes);
 
   return (
     <Layout>
       <div className={styles.event}>
-        <div className={styles.controls}>
+        {/* <div className={styles.controls}>
           <Link href={`/events/edit/${evt.id}`}>
             <a>
               <FaPenAlt /> Edit Event
@@ -40,7 +41,7 @@ export default function Eventpage({ evt }) {
           <a href="#" className={styles.delete} onClick={deleteEvent}>
             <FaTimes /> Delete Event
           </a>
-        </div>
+        </div> */}
 
         <span>
           {new Date(evt.attributes.date).toLocaleDateString("en-US")} at{" "}
