@@ -7,6 +7,7 @@ import { FaPenAlt, FaTimes } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
+import EventMap from "@/components/EventMap";
 export default function Eventpage({ evt }) {
   const router = useRouter()
 
@@ -69,7 +70,8 @@ export default function Eventpage({ evt }) {
         <p>{evt.attributes.description}</p>
         <h3>Venue: {evt.attributes.venue}</h3>
         <p>{evt.attributes.address}</p>
-
+  
+         <EventMap evt={evt}/>
         <Link href={"/events"}>
           <a className={styles.back}>{"<"} Go Back</a>
         </Link>
@@ -78,39 +80,39 @@ export default function Eventpage({ evt }) {
   );
 }
 
-export async function getStaticPaths() {
-  const res = await fetch(`${API_URL}/api/events`);
-  const events = await res.json();
-  const paths = events.data.map((evt) => ({
-    params: { slug: evt.attributes.slug },
-  }));
+// export async function getStaticPaths() {
+//   const res = await fetch(`${API_URL}/api/events`);
+//   const events = await res.json();
+//   const paths = events.data.map((evt) => ({
+//     params: { slug: evt.attributes.slug },
+//   }));
 
-  return {
-    paths,
-    fallback: true,
-  };
-}
+//   return {
+//     paths,
+//     fallback: true,
+//   };
+// }
 
-export async function getStaticProps({ params: { slug } }) {
-  const res = await fetch(
-    `${API_URL}/api/events?filters[slug][$eq]=${slug}&[populate]=*`
-  );
-  const events = await res.json();
-  return {
-    props: {
-      evt: events.data[0],
-    },
-    revalidate: 1,
-  };
-}
-
-// export async function getServerSideProps({query: {slug}}){
-//   console.log(slug)
-//   const res = await fetch(`${API_URL}/api/events/${slug}`)
-//   const events = await res.json()
+// export async function getStaticProps({ params: { slug } }) {
+//   const res = await fetch(
+//     `${API_URL}/api/events?filters[slug][$eq]=${slug}&[populate]=*`
+//   );
+//   const events = await res.json();
 //   return {
 //     props: {
-//       evt: events[0]
-//     }
-//   }
+//       evt: events.data[0],
+//     },
+//     revalidate: 1,
+//   };
 // }
+
+export async function getServerSideProps({query: {slug}}){
+  console.log(slug)
+  const res = await fetch(`${API_URL}/api/events?filters[slug][$eq]=${slug}&[populate]=*`)
+  const events = await res.json()
+  return {
+    props: {
+      evt: events[0]
+    }
+  }
+}
